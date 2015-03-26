@@ -1,0 +1,15 @@
+{
+    "name": "restler/application",
+    "description": "Application boilerplates for Luracast Restler framework",
+    "require": {
+        "restler/framework": "3.0.0-RC6"
+    },
+    "license": "LGPL 2",
+    "authors": [
+        {
+            "name": "Luracast",
+            "email": "arul@luracast.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}

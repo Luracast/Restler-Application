@@ -1,0 +1,79 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "815f9ab2b0e21a81ce34ad245748ad52",
+    "packages": [
+        {
+            "name": "restler/framework",
+            "version": "3.0.0-RC6",
+            "target-dir": "Luracast/Restler",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Luracast/Restler-Framework.git",
+                "reference": "3bbf3ba5449036f5214041c349801e4eca4ad3d8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Luracast/Restler-Framework/zipball/3bbf3ba5449036f5214041c349801e4eca4ad3d8",
+                "reference": "3bbf3ba5449036f5214041c349801e4eca4ad3d8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "replace": {
+                "luracast/restler": "3.*"
+            },
+            "suggest": {
+                "bshaffer/oauth2-server-php": "If you want to use OAuth2 for authentication",
+                "illuminate/view": "If you want to use laravel blade templates with Html format",
+                "mustache/mustache": "If you want to use mustache/handlebar templates with Html format",
+                "rodneyrehm/plist": "If you need Apple plist binary/xml format",
+                "symfony/yaml": "If you need YAML format",
+                "twig/twig": "If you want to use twig templates with Html format",
+                "zendframework/zendamf": "If you need AMF format"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "master": "v3.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Luracast\\Restler": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "Luracast",
+                    "email": "arul@luracast.com"
+                }
+            ],
+            "description": "Just the Restler Framework without the tests and examples",
+            "homepage": "http://luracast.com/products/restler/",
+            "keywords": [
+                "api",
+                "framework",
+                "rest",
+                "server"
+            ],
+            "time": "2015-03-26 06:43:17"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}
