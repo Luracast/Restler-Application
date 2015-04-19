@@ -1,0 +1,20 @@
+#!/usr/bin/env php
+<?php
+
+if (version_compare(PHP_VERSION, '5.4.0', '<')) {
+    die('This PHP binary is not version 5.4 or greater.');
+}
+
+$options = getopt("", array('host::','port::'));
+
+$host = empty($options['host']) ? 'localhost' : $options['host'];
+
+$port = empty($options['port']) ? 8000 : $options['port'];
+
+$public = __DIR__.'/public';
+$server = __DIR__.'/server.php';
+
+
+echo "Web app development server started on http://{$host}:{$port}\n";
+
+passthru('"' . PHP_BINARY . '"' . " -S {$host}:{$port} -t \"{$public}\" \"{$server}\"");
