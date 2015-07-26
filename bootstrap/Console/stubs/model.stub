@@ -1,0 +1,43 @@
+<?php
+
+softdelete:import/**
+ * Class class:name
+ *
+ * comment:properties
+ */
+class class:name extends Eloquent
+{
+    softdelete:use
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = table:timestamps;
+
+    /**
+     * The database table used by the model.
+     *
+     * @var string
+     */
+    protected $table = 'table:name';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [ //TODO: edit fillable
+        table:fillable
+    ];
+
+    /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        table:hidden
+    ];
+
+}
