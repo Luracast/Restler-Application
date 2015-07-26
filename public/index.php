@@ -11,7 +11,7 @@
 |
 */
 
-require __DIR__.'/../bootstrap/autoload.php';
+require __DIR__ . '/../bootstrap/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +21,9 @@ require __DIR__.'/../bootstrap/autoload.php';
 
 
 use Luracast\Restler\Restler;
+
 $r = new Restler();
+$r->addApiClass('Home', '');
 $r->addApiClass('Explorer');
 
 
@@ -35,4 +37,4 @@ $r->addApiClass('Explorer');
 |
 */
 
- $r->handle();
+$r->handle();
