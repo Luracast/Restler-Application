@@ -1,6 +1,12 @@
 {
     "name": "restler/application",
-    "description": "Application boilerplates for Luracast Restler framework",
+    "description": "Application boiler-plate for Luracast Restler, an api first micro framework",
+    "keywords": [
+        "restler",
+        "rest",
+        "api",
+        "application"
+    ],
     "require": {
         "restler/framework": "3.0.0-RC6"
     },

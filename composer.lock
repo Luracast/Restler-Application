@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "815f9ab2b0e21a81ce34ad245748ad52",
+    "hash": "bc1521734b19da0d16c6c0fef0d9fe9a",
     "packages": [
         {
             "name": "restler/framework",
@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Luracast/Restler-Framework.git",
-                "reference": "3bbf3ba5449036f5214041c349801e4eca4ad3d8"
+                "reference": "a963c019bfc825371c61e230eafb3cc5f96bc528"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Luracast/Restler-Framework/zipball/3bbf3ba5449036f5214041c349801e4eca4ad3d8",
-                "reference": "3bbf3ba5449036f5214041c349801e4eca4ad3d8",
+                "url": "https://api.github.com/repos/Luracast/Restler-Framework/zipball/a94749ece295a4682abbdcb8de0e0ffa86829b1b",
+                "reference": "a963c019bfc825371c61e230eafb3cc5f96bc528",
                 "shasum": ""
             },
             "require": {
@@ -65,7 +65,7 @@
                 "rest",
                 "server"
             ],
-            "time": "2015-03-26 06:43:17"
+            "time": "2015-06-12 08:08:37"
         }
     ],
     "packages-dev": [],
