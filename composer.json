@@ -1,9 +1,14 @@
 {
-    "name": "laravel/database",
-    "description": "Get Laravel 4.2.x database for your non laravel projects. Built on top of illuminate/database to provide migration, seeding and artisan support",
-    "keywords": ["laravel", "database", "sql", "orm"],
+    "name": "restler/application",
+    "description": "Application boiler-plate for Luracast Restler framework",
+    "keywords": [
+        "restler",
+        "rest",
+        "api",
+        "application"
+    ],
     "minimum-stability": "dev",
-    "license": "MIT",
+    "license": "LGPL 2",
     "type": "project",
     "authors": [
         {
