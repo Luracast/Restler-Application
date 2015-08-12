@@ -41,7 +41,7 @@ if (file_exists(BASE . '/.env')) {
 }
 
 $env = $app->detectEnvironment(function () {
-    return getenv('APP_ENV') ?: 'production';
+    return getenv('APP_ENV') ?: 'local';
 });
 
 $app['app'] = $app;
