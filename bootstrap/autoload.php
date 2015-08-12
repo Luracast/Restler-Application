@@ -116,6 +116,9 @@ use Luracast\Restler\Defaults;
 use Luracast\Restler\Format\HtmlFormat;
 use Luracast\Restler\UI\Forms;
 use Luracast\Restler\UI\FormStyles;
+use Luracast\Restler\Scope;
+
+$app['config']['app.aliases'] += Scope::$classAliases + ['Scope' => 'Luracast\Restler\Scope'];
 
 HtmlFormat::$viewPath = $app['path'] . '/views';
 HtmlFormat::$cacheDirectory = $app['path.storage'] . '/views';
