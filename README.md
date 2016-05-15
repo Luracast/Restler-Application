@@ -9,13 +9,13 @@ Restler is an "API First Micro Framework" that offers better web api by design.
 
 Every branch in this git repository contains different application templates to suit your specific needs.
 
-Eloquent App provides laravel 4.2 structure and database support for your restler application development
+Eloquent App provides laravel 4.2 structure and laravel 5.2 database support for your restler application development
 
 
 Installation
 ------------
 
-Make sure PHP 5.4 or above is available on your server
+Make sure PHP 5.5.9 or above is available on your server
 
 [Composer](http://getcomposer.org/) is used to manage the dependencies. If you don't already
 have composer installed, we recommend installing it globally
@@ -86,7 +86,8 @@ one of the DB related class, database engine is initialized.
 
 #### More Documentation
 
-Refer to all database related sections on [Laravel 4.2 website](http://laravel.com/docs/4.2).
+Refer to all database related sections on [Laravel 5.2 website](http://laravel.com/docs/5.2). 
+But folder structure of the application is like [Laravel 4.2](http://laravel.com/docs/4.2)
 
 
 #### What to do next?
@@ -129,12 +130,11 @@ Check the database connection with the following command.
 
 Next you will create a migration file for creating the new table, how about creating an API for leaving feedback?
 
-    php artisan migrate:make --create=feedbacks create_feedbacks_table
+    php artisan make:migration --create=feedbacks create_feedbacks_table
 
-    Created Migration: 2015_08_05_120727_create_feedbacks_table
-    Generating optimized autoload files
+    Created Migration: 2016_05_15_150447_create_feedbacks_table
 
-Edit the `app/database/migrations/2015_08_05_120727_create_feedbacks_table.php` file to have the following content
+Edit the `app/database/migrations/2016_05_15_150447_create_feedbacks_table` file to have the following content
 
 >**Note:-** date and time of calling the command will change the file name accordingly
 
@@ -144,8 +144,8 @@ Edit the `app/database/migrations/2015_08_05_120727_create_feedbacks_table.php` 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFeedbacksTable extends Migration {
-
+class CreateFeedbacksTable extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -153,13 +153,12 @@ class CreateFeedbacksTable extends Migration {
      */
     public function up()
     {
-        Schema::create('feedbacks', function(Blueprint $table)
-        {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('email');
-            $table->text('message');
-            $table->timestamps();
+        Schema::create('feedbacks', function (Blueprint $table) {
+          $table->increments('id');
+          $table->string('name');
+          $table->string('email');
+          $table->text('message');
+          $table->timestamps();
         });
     }
 
@@ -172,8 +171,8 @@ class CreateFeedbacksTable extends Migration {
     {
         Schema::drop('feedbacks');
     }
-
 }
+
 ```
 
 Here we are creating feedbacks table with the name, email, and feedback columns. Next we will run the migration tool so that this table will actually be created.
@@ -181,16 +180,15 @@ Here we are creating feedbacks table with the name, email, and feedback columns.
 ```
 php artisan migrate
 
-Migrated: 2015_08_05_120727_create_feedbacks_table
+Migrated: 2016_05_15_150447_create_feedbacks_table
 ```
 
 Now we can generate a model class with the following command
 
 ```
-php artisan model:make Feedback
+php artisan make:model Feedback
 
 Model created successfully.
-Generating optimized autoload files
 ```
 
 Here we specify the model name as the singular version of the table name. `app/models/Feedback.php`  is generated based on the table structure of feedbacks table
@@ -257,7 +255,7 @@ After that edit the `public/index.php` to add the following line to include the 
 $r->addApiClass('Feedbacks');
 ```
 
-Thats all, you can start the web server with
+That's all, you can start the web server with
 
     php artisan serve
 
@@ -279,4 +277,4 @@ Update the database configuration inside the `.env` file
 
 Now Restler should be running in production mode and laravel related components are running under production environment!
 
-> **Note:-** when running in production mode restler won't detect addion or removal of an api. You need to manually delete the cache files under `app/storage/cache`
+> **Note:-** when running in production mode restler won't detect addition or removal of an api. You need to manually delete the cache files under `app/storage/cache`
