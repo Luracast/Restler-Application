@@ -71,6 +71,7 @@ class Artisan extends \Illuminate\Console\Application
             $console->add(new ModelMakeCommand($app['files']));
             $console->add(new CommandMakeCommand($app['files']));
             $console->add(new EnvironmentCommand());
+            $console->add(new VendorPublishCommand($app['files']));
 
             $app['events']->fire(new ArtisanStarting($console));
             static::$instance = $console;
@@ -85,6 +86,9 @@ class Artisan extends \Illuminate\Console\Application
         foreach ($providers as $class) {
             /** @var ServiceProvider $instance */
             $instance = new $class($app);
+            if (method_exists($instance, 'boot')){
+                $instance->boot();
+            }
             $instance->register();
         }
     }

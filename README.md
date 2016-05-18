@@ -40,6 +40,7 @@ What's in it?
 
 Eloquent Application Template offers lluminate Database support along with Migration, Seeding and Artisan.
 
+> **Note:-** This template is built using [Laravel Database](https://github.com/Luracast/Laravel-Database)
 
 [Laravel](https://github.com/laravel/laravel) is a web application framework with expressive, elegant syntax.
 We extracted the database functionality from it and made it available for restler
