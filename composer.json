@@ -22,6 +22,7 @@
         "illuminate/events": "5.2.*",
         "illuminate/cache": "5.2.*",
         "illuminate/filesystem": "5.2.*",
+        "illuminate/pagination": "5.2.*",
         "luracast/config": "2.*",
         "vlucas/phpdotenv": "~1.0",
         "restler/framework": "3.0.0-RC6",

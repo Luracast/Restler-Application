@@ -16,6 +16,7 @@ define('BASE', dirname(__DIR__));
 require BASE . '/vendor/autoload.php';
 
 use Bootstrap\Container\Application;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Events\Dispatcher;
@@ -171,8 +172,33 @@ $app->singleton('db', function () use ($app) {
     return $db->getDatabaseManager();
 });
 
+/*
+|--------------------------------------------------------------------------
+| Pagination Support
+|--------------------------------------------------------------------------
+*/
+Paginator::currentPathResolver(function () {
+    return strtok($_SERVER["REQUEST_URI"], '?');
+});
+
+Paginator::currentPageResolver(function ($pageName = 'page') {
+    if (isset($_REQUEST[$pageName])) {
+        $page = $_REQUEST[$pageName];
+        if (filter_var($page, FILTER_VALIDATE_INT) !== false && (int)$page >= 1) {
+            return $page;
+        }
+    }
+
+    return 1;
+});
+
+/*
+|--------------------------------------------------------------------------
+| Redis Support
+|--------------------------------------------------------------------------
+*/
 $app->singleton('redis', function () use ($app) {
-    return new \Illuminate\Redis\Database($app['config']['database.redis']);
+    return new Illuminate\Redis\Database($app['config']['database.redis']);
 });
 
 /*
