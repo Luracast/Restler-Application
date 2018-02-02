@@ -129,13 +129,13 @@ Check the database connection with the following command.
 
     Migration table created successfully.
 
-Next you will create a migration file for creating the new table, how about creating an API for leaving feedback?
+Next you will create a migration file for creating the new table, how about creating an API for writing reviews?
 
-    php artisan make:migration --create=feedbacks create_feedbacks_table
+    php artisan make:migration --create=reviews create_reviews_table
 
-    Created Migration: 2016_05_15_150447_create_feedbacks_table
+    Created Migration: 2016_05_15_150447_create_reviews_table
 
-Edit the `app/database/migrations/2016_05_15_150447_create_feedbacks_table` file to have the following content
+Edit the `app/database/migrations/2016_05_15_150447_create_reviews_table` file to have the following content
 
 >**Note:-** date and time of calling the command will change the file name accordingly
 
@@ -145,7 +145,7 @@ Edit the `app/database/migrations/2016_05_15_150447_create_feedbacks_table` file
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFeedbacksTable extends Migration
+class CreateReviewsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -154,7 +154,7 @@ class CreateFeedbacksTable extends Migration
      */
     public function up()
     {
-        Schema::create('feedbacks', function (Blueprint $table) {
+        Schema::create('reviews', function (Blueprint $table) {
           $table->increments('id');
           $table->string('name');
           $table->string('email');
@@ -170,35 +170,35 @@ class CreateFeedbacksTable extends Migration
      */
     public function down()
     {
-        Schema::drop('feedbacks');
+        Schema::drop('reviews');
     }
 }
 
 ```
 
-Here we are creating feedbacks table with the name, email, and feedback columns. Next we will run the migration tool so that this table will actually be created.
+Here we are creating reviews table with the name, email, and message columns. Next we will run the migration tool so that this table will actually be created.
 
 ```
 php artisan migrate
 
-Migrated: 2016_05_15_150447_create_feedbacks_table
+Migrated: 2016_05_15_150447_create_reviews_table
 ```
 
 Now we can generate a model class with the following command
 
 ```
-php artisan make:model Feedback
+php artisan make:model Review
 
 Model created successfully.
 ```
 
-Here we specify the model name as the singular version of the table name. `app/models/Feedback.php`  is generated based on the table structure of feedbacks table
+Here we specify the model name as the singular version of the table name. `app/models/Review.php`  is generated based on the table structure of reviews table
 
 The comments at the top of the file are used by restler to understand what properties are exposed by the model.
 
 ```php
 /**
- * Class Feedback
+ * Class Review
  *
  * @property-read  int    $id
  * @property       string $name
@@ -210,40 +210,40 @@ The comments at the top of the file are used by restler to understand what prope
  */
  ```
 
-Next let us create the API class `app/controllers/Feedbacks.php` with the following content
+Next let us create the API class `app/controllers/Reviews.php` with the following content
 
 ```php
 <?php
 
 use Luracast\Restler\RestException;
 
-class Feedbacks {
+class Reviews {
     /**
-    * Get all feedbacks
+    * Get all reviews
     *
-    * return array {@type Feedback}
+    * return array {@type Review}
     */
     public function index(){
-        return Feedback::all();
+        return Review::all();
     }
 
     public function get($id){
-        if(!$feedback = Feedback::find($id)){
-            throw new RestException(404, 'feedback not found');
+        if(!$review = Review::find($id)){
+            throw new RestException(404, 'review not found');
         }
-        return $feedback;
+        return $review;
     }
 
-    public function post(Feedback $feedback){
-        $feedback->save();
-        return $feedback;
+    public function post(Review $review){
+        $review->save();
+        return $review;
     }
 
     public function delete($id){
-        if(!$feedback = Feedback::find($id)){
-            throw new RestException(404, 'feedback not found');
+        if(!$review = Review::find($id)){
+            throw new RestException(404, 'review not found');
         }
-        $feedback->delete();
+        $review->delete();
         return ['success'=>true];
     }
 
@@ -253,7 +253,7 @@ class Feedbacks {
 After that edit the `public/index.php` to add the following line to include the new API.
 
 ```php
-$r->addApiClass('Feedbacks');
+$r->addApiClass('Reviews');
 ```
 
 That's all, you can start the web server with
@@ -264,7 +264,7 @@ That's all, you can start the web server with
 
 Point your web browser to http://localhost:8000/explorer/ and explore!
 
-[![Restler API Explorer](http://i.stack.imgur.com/4kwPy.png)](http://i.stack.imgur.com/4kwPy.png)
+[![Restler API Explorer](documentation/explorer.png)](documentation/explorer.png)
 
 #### Production Mode
 
