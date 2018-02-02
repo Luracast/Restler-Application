@@ -8,7 +8,7 @@
         "application"
     ],
     "minimum-stability": "dev",
-    "license": "LGPL 2",
+    "license": "LGPL-2.0-or-later",
     "type": "project",
     "authors": [
         {
@@ -43,10 +43,8 @@
             "app/database/migrations",
             "app/database/seeds"
         ],
-        "psr-0": {
-            "": "app/controllers"
-        },
         "psr-4": {
+            "": "app/controllers",
             "Bootstrap\\": "bootstrap/"
         }
     }
