@@ -10,7 +10,7 @@
     "require": {
         "restler/framework": "3.0.0-RC6"
     },
-    "license": "LGPL 2",
+    "license": "LGPL-2.0-or-later",
     "authors": [
         {
             "name": "Luracast",
