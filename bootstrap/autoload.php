@@ -15,6 +15,7 @@ define('BASE', dirname(__DIR__));
 
 require BASE . '/vendor/autoload.php';
 
+use Bootstrap\Config\Config;
 use Bootstrap\Container\Application;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Facade;
@@ -23,7 +24,6 @@ use Illuminate\Events\Dispatcher;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
-use Luracast\Config\Config;
 
 
 /*
@@ -119,6 +119,20 @@ if (!function_exists('config_path')) {
     }
 }
 
+if (!function_exists('getAppNamespace')) {
+
+    function getAppNamespace()
+    {
+        $composer = json_decode(file_get_contents(BASE . '/composer.json'), true);
+        foreach ((array)data_get($composer, 'autoload.psr-4') as $namespace => $path) {
+            foreach ((array)$path as $pathChoice) {
+                if (realpath(BASE . '/' . 'bootstrap') == realpath(BASE . '/' . $pathChoice))
+                    return $namespace;
+            }
+        }
+        throw new RuntimeException("Unable to detect application namespace.");
+    }
+}
 
 $app = new Application();
 
@@ -137,7 +151,7 @@ if (file_exists(BASE . '/.env')) {
 }
 
 $env = $app->detectEnvironment(function () {
-    return getenv('APP_ENV') ?: 'local';
+    return getenv('APP_ENV') ?: 'development';
 });
 
 $app['app'] = $app;

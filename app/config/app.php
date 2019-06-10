@@ -15,7 +15,6 @@ return [
 
     'providers' => [
         'Illuminate\Database\MigrationServiceProvider',
-        'Illuminate\Database\SeedServiceProvider',
         /*
          * To add Redis support,
          *     - run composer require illuminate/redis:5.2.*
@@ -42,7 +41,7 @@ return [
         'Seeder'                                         => 'Illuminate\Database\Seeder',
         'SoftDeletingTrait'                              => 'Illuminate\Database\Eloquent\SoftDeletingTrait',
         'Artisan'                                        => 'Bootstrap\Console\ArtisanFacade',
-        'Config'                                         => 'Luracast\Config\Config',
+        'Config'                                         => 'Illuminate\Support\Facades\Config',
         'Cache'                                          => 'Illuminate\Support\Facades\Cache',
         'File'                                           => 'Illuminate\Support\Facades\File',
         'Event'                                          => 'Illuminate\Support\Facades\Event',

@@ -26,9 +26,8 @@ class ServeCommand extends Command
      * Execute the console command.
      *
      * @return void
-     * @throws \Exception
      */
-    public function fire()
+    public function handle()
     {
         $this->checkPhpVersion();
 
@@ -39,11 +38,10 @@ class ServeCommand extends Command
         $port = $this->input->getOption('port');
 
         $public = $this->laravel['path.public'];
-        $base = $this->laravel['path.base'];
 
         $this->info("Web app development server started on http://{$host}:{$port}");
 
-        passthru('"' . PHP_BINARY . '"' . " -S {$host}:{$port} -t \"{$public}\" \"{$base}/server.php\"");
+        passthru('"' . PHP_BINARY . '"' . " -S {$host}:{$port} -t \"{$public}\" server.php");
     }
 
     /**
