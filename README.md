@@ -9,13 +9,13 @@ Restler is an "API First Micro Framework" that offers better web api by design.
 
 Every branch in this git repository contains different application templates to suit your specific needs.
 
-Eloquent App provides laravel 4.2 structure and laravel 5.2 database support for your restler application development
+Eloquent App provides laravel 4.2 structure and laravel 5.8.* database support for your restler application development
 
 
 Installation
 ------------
 
-Make sure PHP 5.5.9 or above is available on your server
+Make sure PHP 7.1.3 or above is available on your server
 
 [Composer](http://getcomposer.org/) is used to manage the dependencies. If you don't already
 have composer installed, we recommend installing it globally
@@ -71,7 +71,7 @@ running the `php artisan serve` on the project root. This will run the php devel
 port 8000 on localhost by default. If you need to change that you may use the command line
 options as shown below
 
-    php artisan serve --port=8888 -host=testserver.dev
+    php artisan serve --port=8888 --host=testserver.dev
 
 This project also comes with swagger ui for testing and documenting the api. You can access that
 using the following url
@@ -87,7 +87,7 @@ one of the DB related class, database engine is initialized.
 
 #### More Documentation
 
-Refer to all database related sections on [Laravel 5.2 website](http://laravel.com/docs/5.2). 
+Refer to all database related sections on [Laravel 5.8 website](http://laravel.com/docs/5.2). 
 But folder structure of the application is like [Laravel 4.2](http://laravel.com/docs/4.2)
 
 
@@ -133,7 +133,7 @@ Next you will create a migration file for creating the new table, how about crea
 
     php artisan make:migration --create=reviews create_reviews_table
 
-    Created Migration: 2016_05_15_150447_create_reviews_table
+    Created Migration: 2019_06_10_154306_create_reviews_table
 
 Edit the `app/database/migrations/2016_05_15_150447_create_reviews_table` file to have the following content
 
@@ -155,7 +155,7 @@ class CreateReviewsTable extends Migration
     public function up()
     {
         Schema::create('reviews', function (Blueprint $table) {
-          $table->increments('id');
+          $table->bigIncrements('id');
           $table->string('name');
           $table->string('email');
           $table->text('message');
@@ -181,7 +181,8 @@ Here we are creating reviews table with the name, email, and message columns. Ne
 ```
 php artisan migrate
 
-Migrated: 2016_05_15_150447_create_reviews_table
+Migrating: 2019_06_10_154306_create_reviews_table
+Migrated:  2019_06_10_154306_create_reviews_table
 ```
 
 Now we can generate a model class with the following command
