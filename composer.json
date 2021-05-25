@@ -8,9 +8,10 @@
         "application"
     ],
     "require": {
-        "restler/framework": "3.0.0-RC6"
+        "php": ">=5.5",
+        "restler/framework": "^5"
     },
-    "license": "LGPL-2.0-or-later",
+    "license": "LGPL-2.1-or-later",
     "authors": [
         {
             "name": "Luracast",
@@ -19,8 +20,14 @@
     ],
     "minimum-stability": "dev",
     "autoload": {
-        "psr-0": {
-            "" : "src"
+        "psr-4": {
+            "App\\" : "src/"
         }
+    },
+    "scripts": {
+        "serve": "php -S localhost:8080 -t public server.php"
+    },
+    "scripts-descriptions": {
+        "serve": "Starts php built-in web server"
     }
 }
