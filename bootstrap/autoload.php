@@ -17,12 +17,14 @@ require BASE . '/vendor/autoload.php';
 
 use Bootstrap\Config\Config;
 use Bootstrap\Container\Application;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Facade;
-use Illuminate\Database\Capsule\Manager as Capsule;
-use Illuminate\Events\Dispatcher;
 use Illuminate\Cache\CacheManager;
+use Illuminate\Database\Capsule\Manager as Database;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Events\Dispatcher;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Queue\Capsule\Manager as Queue;
+use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Str;
 
 
@@ -36,10 +38,11 @@ if (!function_exists('app')) {
     /**
      * Get the available container instance.
      *
-     * @param  string $make
-     * @param  array $parameters
+     * @param string $make
+     * @param array $parameters
      *
      * @return mixed|Application
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     function app($make = null, $parameters = [])
     {
@@ -55,8 +58,8 @@ if (!function_exists('env')) {
     /**
      * Gets the value of an environment variable. Supports boolean, empty and null.
      *
-     * @param  string $key
-     * @param  mixed $default
+     * @param string $key
+     * @param mixed $default
      *
      * @return mixed
      */
@@ -88,46 +91,15 @@ if (!function_exists('env')) {
     }
 }
 
-if (!function_exists('storage_path')) {
-    /**
-     * Get the path to the storage folder.
-     *
-     * @param  string $path
-     *
-     * @return string
-     */
-    function storage_path($path = '')
-    {
-        return app('path.storage') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
-    }
-}
-
-
-if (!function_exists('config_path')) {
-
-    function config_path($path = '')
-    {
-        return BASE . '/app/config' . ($path ? DIRECTORY_SEPARATOR . $path : $path);
-    }
-}
-
-if (!function_exists('config_path')) {
-
-    function config_path($path = '')
-    {
-        return BASE . '/app/config' . ($path ? DIRECTORY_SEPARATOR . $path : $path);
-    }
-}
-
 if (!function_exists('getAppNamespace')) {
-
     function getAppNamespace()
     {
         $composer = json_decode(file_get_contents(BASE . '/composer.json'), true);
         foreach ((array)data_get($composer, 'autoload.psr-4') as $namespace => $path) {
             foreach ((array)$path as $pathChoice) {
-                if (realpath(BASE . '/' . 'bootstrap') == realpath(BASE . '/' . $pathChoice))
+                if (realpath(BASE . '/' . 'app') == realpath(BASE . '/' . $pathChoice)) {
                     return $namespace;
+                }
             }
         }
         throw new RuntimeException("Unable to detect application namespace.");
@@ -147,7 +119,8 @@ $app = new Application();
 |
 */
 if (file_exists(BASE . '/.env')) {
-    Dotenv::load(BASE);
+    $dotenv = Dotenv\Dotenv::createMutable(BASE);
+    $dotenv->load();
 }
 
 $env = $app->detectEnvironment(function () {
@@ -157,7 +130,48 @@ $env = $app->detectEnvironment(function () {
 $app['app'] = $app;
 Facade::setFacadeApplication($app);
 
-$app->instance('config', new Config(BASE . '/app/config', $env));
+/*
+|--------------------------------------------------------------------------
+| Bind Paths
+|--------------------------------------------------------------------------
+|
+| Here we are binding the paths configured in paths.php to the app. You
+| should not be changing these here. If you need to change these you
+| may do so within the paths.php file and they will be bound here.
+|
+*/
+
+$app->bindInstallPaths(require __DIR__ . '/paths.php');
+
+if (!function_exists('base_path')) {
+    function base_path($path = '')
+    {
+        return app('path.base') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+    }
+}
+
+if (!function_exists('storage_path')) {
+    function storage_path($path = '')
+    {
+        return app('path.storage') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+    }
+}
+
+if (!function_exists('config_path')) {
+    function config_path($path = '')
+    {
+        return app('path.config') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+    }
+}
+
+if (!function_exists('database_path')) {
+    function database_path($path = '')
+    {
+        return app('path.database') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+    }
+}
+
+$app->instance('config', new Config(app('path.config'), $env));
 
 $app->singleton('events', function () use ($app) {
     return new Dispatcher($app);
@@ -175,7 +189,7 @@ $app->singleton('db', function () use ($app) {
     $config = $app['config'];
     $default = $config['database.default'];
     $fetch = $config['database.fetch'];
-    $db = new Capsule($app);
+    $db = new Database($app);
     $config['database.fetch'] = $fetch;
     $config['database.default'] = $default;
     $db->addConnection($config['database.connections'][$default]);
@@ -183,8 +197,38 @@ $app->singleton('db', function () use ($app) {
     $db->setAsGlobal();
     $db->bootEloquent();
 
+    $db->getDatabaseManager()->extend('mongodb', function ($config, $name) {
+        $config['name'] = $name;
+        return new Jenssegers\Mongodb\Connection($config);
+    });
     return $db->getDatabaseManager();
 });
+
+$app->singleton('queue', function () use ($app) {
+    $config = $app['queue'];
+    $default = $config['queue.default'];
+    $connections = $config['queue.connections'];
+    $config['queue.default'] = $default;
+    $config['queue.connections'] = $connections;
+    $queue = new Queue;
+    $queue->addConnection($config['queue.connections'][$default]);
+    $queue->setAsGlobal();
+
+    return $queue->getQueueManager();
+});
+
+$app->singleton('queue.connection', function () use ($app) {
+    return $app['queue']->connection();
+});
+
+if (!function_exists('config')) {
+    function config($path, $default = null)
+    {
+        if (is_string($path)) {
+            return $app['config'][$path] ?? $default;
+        }
+    }
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -226,6 +270,16 @@ $app->singleton('redis', function () use ($app) {
 */
 
 spl_autoload_register(function ($className) use ($app) {
+    if (Model::class === $className) {
+        include __DIR__ . '/../vendor/illuminate/database/Eloquent/Model.php';
+        $app['db'];
+        return true;
+    }
+    if (Jenssegers\Mongodb\Eloquent\Model::class === $className) {
+        include __DIR__ . '/../vendor/jenssegers/mongodb/src/Jenssegers/Mongodb/Eloquent/Model.php';
+        $app['db'];
+        return true;
+    }
     if (isset($app['config']['app.aliases'][$className])) {
         $app['db']; //lazy initialization of DB
         return class_alias($app['config']['app.aliases'][$className], $className);
@@ -236,35 +290,24 @@ spl_autoload_register(function ($className) use ($app) {
 
 /*
 |--------------------------------------------------------------------------
-| Bind Paths
-|--------------------------------------------------------------------------
-|
-| Here we are binding the paths configured in paths.php to the app. You
-| should not be changing these here. If you need to change these you
-| may do so within the paths.php file and they will be bound here.
-|
-*/
-
-$app->bindInstallPaths(require __DIR__ . '/paths.php');
-
-
-/*
-|--------------------------------------------------------------------------
-| Configure Restler to adapt to Laravel  4.2 structure
+| Configure Restler to adapt to Laravel structure
 |--------------------------------------------------------------------------
 */
 
 use Luracast\Restler\Defaults;
 use Luracast\Restler\Format\HtmlFormat;
+use Luracast\Restler\UI\Bootstrap3Form;
 use Luracast\Restler\UI\Forms;
-use Luracast\Restler\UI\FormStyles;
 use Luracast\Restler\Scope;
 
 $app['config']['app.aliases'] += Scope::$classAliases + ['Scope' => 'Luracast\Restler\Scope'];
 
+Defaults::$cacheDirectory = $app['config']['cache.path'];
 HtmlFormat::$viewPath = $app['path'] . '/views';
 HtmlFormat::$cacheDirectory = $app['path.storage'] . '/views';
-Defaults::$cacheDirectory = $app['path.storage'] . '/cache';
 
 HtmlFormat::$template = 'blade';
-Forms::$style = FormStyles::$bootstrap3;
+//Forms::$style = FormStyles::$bootstrap3; // for v4 and below
+Forms::setStyles(new Bootstrap3Form); // for v5
+
+include BASE . '/routes/api.php';

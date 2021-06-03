@@ -1,4 +1,5 @@
 <?php
+
 namespace Bootstrap\Container;
 
 use Illuminate\Container\Container;
@@ -7,8 +8,8 @@ use Closure;
 class Application extends Container
 {
 
-    const VERSION = 5.8;
-    
+    const VERSION = '8';
+
     /**
      * The base path of the application installation.
      *
@@ -19,7 +20,8 @@ class Application extends Container
     /**
      * Create a new Lumen application instance.
      *
-     * @param  string|null $basePath
+     * @param string|null $basePath
+     *
      * @return void
      */
     public function __construct($basePath = null)
@@ -27,6 +29,11 @@ class Application extends Container
         $this->basePath = $basePath;
         $this->bootstrapContainer();
         //$this->registerErrorHandling();
+    }
+
+    public static function version()
+    {
+        return static::VERSION;
     }
 
     /**
@@ -42,7 +49,8 @@ class Application extends Container
     /**
      * Get the base path for the application.
      *
-     * @param  string|null $path
+     * @param string|null $path
+     *
      * @return string
      */
     public function basePath($path = null)
@@ -66,18 +74,19 @@ class Application extends Container
      */
     public function databasePath()
     {
-        return $this->basePath() . '/app/database';
+        return database_path();
     }
 
     /**
      * Get the storage path for the application.
      *
-     * @param  string|null $path
+     * @param string|null $path
+     *
      * @return string
      */
     public function storagePath($path = null)
     {
-        return $this->basePath() . 'app/storage' . ($path ? '/' . $path : $path);
+        return storage_path($path);
     }
 
 
@@ -106,7 +115,7 @@ class Application extends Container
     /**
      * Detect the application's current environment.
      *
-     * @param  array|string $environments
+     * @param array|string $environments
      *
      * @return string
      */
@@ -130,7 +139,9 @@ class Application extends Container
                     // environments and look for the host that matches the host for this request we
                     // are currently processing here, then return back these environment's names.
                     foreach ((array)$hosts as $host) {
-                        if (str_is($host, gethostname())) return $this['env'] = $environment;
+                        if (str_is($host, gethostname())) {
+                            return $this['env'] = $environment;
+                        }
                     }
                 }
             } elseif (is_string($environments)) {
@@ -144,7 +155,7 @@ class Application extends Container
     /**
      * Get the environment argument from the console.
      *
-     * @param  array $args
+     * @param array $args
      *
      * @return string|null
      */
@@ -163,7 +174,7 @@ class Application extends Container
     /**
      * Bind the installation paths to the application.
      *
-     * @param  array $paths
+     * @param array $paths
      *
      * @return void
      */
@@ -182,7 +193,8 @@ class Application extends Container
     /**
      * Register an application error handler.
      *
-     * @param  Closure $callback
+     * @param Closure $callback
+     *
      * @return void
      */
     public function error(Closure $callback)
@@ -199,4 +211,4 @@ class Application extends Container
     {
         return getAppNamespace();
     }
-} 
+}

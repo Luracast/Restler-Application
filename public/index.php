@@ -1,4 +1,11 @@
 <?php
+/**
+ * Laravel Database - for any web application
+ *
+ * @package  Database
+ * @author   Arul Kumaran <arul@luracast.com>
+ */
+
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader
@@ -11,20 +18,25 @@
 |
 */
 
+use App\Http\Controllers\Home;
+use App\Http\Controllers\Reviews;
+use Luracast\Restler\Restler;
+
 require __DIR__ . '/../bootstrap/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
 | Configure your Web Application
 |--------------------------------------------------------------------------
+|
+| Configure your favourite web app framework to handle web requests and
+| respond back. If you are using Restler 5 framework, you may simply uncomment
+| the code below and run the following command from the command line on the
+| project root folder
+|
+|    composer require restler/framework
+|
 */
-
-
-use Luracast\Restler\Restler;
-
-$r = new Restler(getenv('APP_ENV') == 'production');
-$r->addApiClass('Home', '');
-$r->addApiClass('Explorer');
 
 
 /*
@@ -37,4 +49,9 @@ $r->addApiClass('Explorer');
 |
 */
 
+$productionMode = getenv('APP_ENV') == 'production';
+$r = new Restler($productionMode);
+$r->addAPIClass(Explorer::class);
+$r->addAPIClass(Home::class,'');
+$r->addAPIClass(Reviews::class);
 $r->handle();

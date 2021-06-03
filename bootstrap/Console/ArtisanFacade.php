@@ -1,7 +1,17 @@
 <?php
 namespace Bootstrap\Console;
 
+use Closure;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
+/**
+ * Class ArtisanFacade
+ * @package Bootstrap\Console
+ *
+ * @method ClosureCommand command($signature, Closure $callback)  Register a Closure based command with the application.
+ * @method SymfonyCommand add(SymfonyCommand $command)  Add a command to the console.
+ * @method int run() Execute
+ */
 class ArtisanFacade
 {
     /**
