@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Review
  *
- * @property-read  string $id
+ * @property-read  int $id
  * @property       string $name
  * @property       string $email
  * @property       string $message
@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Review extends Model
 {
-    protected $appends = ['id'];
+    protected $appends = [];
 
     protected $dates = ['created_at', 'updated_at'];
 
@@ -52,6 +52,5 @@ class Review extends Model
     protected $hidden = [
         'password',
         'secret',
-        '_id'
     ];
 }
