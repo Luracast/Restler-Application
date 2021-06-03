@@ -18,25 +18,23 @@
   "require": {
     "php": "^7.2.5|^8",
     "restler/framework": "^5",
-    "illuminate/cache": "^7.10",
-    "illuminate/database": "^7.10",
-    "illuminate/events": "^7.10",
-    "illuminate/filesystem": "^7.10",
-    "illuminate/pagination": "^7.10",
-    "jenssegers/mongodb": "^4",
+    "illuminate/cache": "^8 || ^7",
+    "illuminate/database": "^8 || ^7",
+    "illuminate/events": "^8 || ^7",
+    "illuminate/filesystem": "^8 || ^7",
+    "illuminate/pagination": "^8 || ^7",
     "league/flysystem": "^1.0",
     "luracast/config": "2.*",
     "psy/psysh": "^0.10.4",
-    "symfony/process": "^5.0",
-    "vlucas/phpdotenv": "^4.1",
-    "webonyx/graphql-php": "^14.3"
+    "symfony/process": "^5",
+    "vlucas/phpdotenv": "^5"
   },
   "require-dev": {
     "doctrine/dbal": "~2.10",
-    "illuminate/console": "^7.10",
-    "illuminate/queue": "^7.10",
-    "illuminate/view": "^7.10",
-    "laravel/helpers": "^1.2"
+    "illuminate/console": "^8 || ^7",
+    "illuminate/queue": "^8 || ^7",
+    "illuminate/view": "^8 || ^7",
+    "laravel/helpers": "^1"
   },
   "suggest": {
     "doctrine/dbal": "Allow renaming columns and dropping SQLite columns."
