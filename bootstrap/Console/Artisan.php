@@ -78,7 +78,7 @@ class Artisan extends \Illuminate\Console\Application
                 ->setAutoExit(false);
 
             $app->instance('artisan', $console);
-            //static::registerServiceProviders($app);
+            static::registerServiceProviders($app);
             $console->add(new AutoloadCommand($app['composer']));
             $console->add(new ServeCommand());
             $console->add(new ModelMakeCommand($app['files']));
@@ -87,7 +87,8 @@ class Artisan extends \Illuminate\Console\Application
             $console->add(new VendorPublishCommand($app['files']));
             $console->add(new FactoryMakeCommand($app['files']));
 
-            // DB Migration Commands
+            /*
+            // DB Migration Commands handled through service provider in config/app.php
             $app->instance(
                 'migration.repository',
                 new DatabaseMigrationRepository($app['db'], "migrations")
@@ -109,6 +110,7 @@ class Artisan extends \Illuminate\Console\Application
             $console->add(new ResetCommand($app['migrator']));
             $console->add(new RollbackCommand($app['migrator']));
             $console->add(new FreshCommand());
+            */
 
             // DB Seed Commands
             $console->add(new SeedCommand($app['db']));

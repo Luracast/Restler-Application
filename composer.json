@@ -18,11 +18,11 @@
   "require": {
     "php": "^7.2.5|^8",
     "restler/framework": "^5",
-    "illuminate/cache": "^8 || ^7",
-    "illuminate/database": "^8 || ^7",
-    "illuminate/events": "^8 || ^7",
-    "illuminate/filesystem": "^8 || ^7",
-    "illuminate/pagination": "^8 || ^7",
+    "illuminate/cache": "^8",
+    "illuminate/database": "^8",
+    "illuminate/events": "^8",
+    "illuminate/filesystem": "^8",
+    "illuminate/pagination": "^8",
     "league/flysystem": "^1.0",
     "luracast/config": "2.*",
     "psy/psysh": "^0.10.4",
@@ -31,9 +31,9 @@
   },
   "require-dev": {
     "doctrine/dbal": "~2.10",
-    "illuminate/console": "^8 || ^7",
-    "illuminate/queue": "^8 || ^7",
-    "illuminate/view": "^8 || ^7",
+    "illuminate/console": "^8",
+    "illuminate/queue": "^8",
+    "illuminate/view": "^8",
     "laravel/helpers": "^1"
   },
   "suggest": {
