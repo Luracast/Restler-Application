@@ -18,6 +18,8 @@ use Illuminate\Database\Console\Migrations\StatusCommand;
 use Illuminate\Database\Console\Seeds\SeedCommand;
 use Illuminate\Database\Console\WipeCommand;
 use Illuminate\Database\Migrations\DatabaseMigrationRepository;
+use Illuminate\Database\Migrations\MigrationCreator;
+use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
@@ -50,7 +52,7 @@ class Artisan extends \Illuminate\Console\Application
      *
      * @return Artisan
      */
-    public static function start($app = null)
+    public static function start($app = null): Artisan
     {
         if (static::$instance) {
             return static::$instance;
@@ -66,18 +68,17 @@ class Artisan extends \Illuminate\Console\Application
      *
      * @return Artisan
      */
-    public static function make($app = null)
+    public static function make($app = null): Artisan
     {
         if (!static::$instance) {
             /** @var Application $app */
             $app = Facade::getFacadeApplication();
-            /** @var Artisan $console */
             with($console = new static($app, $app['events'], Application::VERSION . '.*'))
                 //->setExceptionHandler($app['exception'])
                 ->setAutoExit(false);
 
             $app->instance('artisan', $console);
-            static::registerServiceProviders($app);
+            //static::registerServiceProviders($app);
             $console->add(new AutoloadCommand($app['composer']));
             $console->add(new ServeCommand());
             $console->add(new ModelMakeCommand($app['files']));
@@ -87,9 +88,21 @@ class Artisan extends \Illuminate\Console\Application
             $console->add(new FactoryMakeCommand($app['files']));
 
             // DB Migration Commands
-            $console->add(new InstallCommand(new DatabaseMigrationRepository($app['db'], "migrations")));
+            $app->instance(
+                'migration.repository',
+                new DatabaseMigrationRepository($app['db'], "migrations")
+            );
+            $app->instance(
+                'migrator',
+                new Migrator($app['migration.repository'], $app['db'], $app['files'], $app['events'])
+            );
+            $app->instance(
+                'migration.creator',
+                new MigrationCreator($app['files'], $app->basePath('stubs'))
+            );
+            $console->add(new InstallCommand($app['migration.repository']));
             $console->add(new WipeCommand());
-            $console->add(new MigrateCommand($app['migrator']));
+            $console->add(new MigrateCommand($app['migrator'], $app['events']));
             $console->add(new MigrateMakeCommand($app['migration.creator'], $app['composer']));
             $console->add(new StatusCommand($app['migrator']));
             $console->add(new RefreshCommand());
@@ -132,7 +145,7 @@ class Artisan extends \Illuminate\Console\Application
      * @param Closure $callback
      * @return ClosureCommand
      */
-    public function command($signature, Closure $callback)
+    public function command(string $signature, Closure $callback): ClosureCommand
     {
         $command = new ClosureCommand($signature, $callback);
 
