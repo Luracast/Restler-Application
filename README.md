@@ -1,4 +1,4 @@
-![Restler 4](https://raw.githubusercontent.com/Luracast/Restler/master/public/examples/resources/restler.svg)
+![Restler 5](https://raw.githubusercontent.com/Luracast/Restler/master/public/examples/resources/restler.svg)
 
 Restler 5 Application with Eloquent
 =================================
@@ -80,7 +80,7 @@ using the following url
 
 http://localhost:8000/
 
-![Explorer Default-App](https://raw.githubusercontent.com/Arul-/RestlerApplication/gh-pages/default-app.png)
+![Explorer Default-App](https://user-images.githubusercontent.com/2255137/120817900-adf80680-c584-11eb-82cf-8284a69812ce.png)
 
 #### How it works?
 
@@ -239,13 +239,13 @@ Then run the server again with `php artisan serve`
 
 You will see the following
 
-![Explorer Reviews](https://raw.githubusercontent.com/Arul-/RestlerApplication/gh-pages/reviews.png)
+![Explorer Reviews](https://user-images.githubusercontent.com/2255137/120818108-e3045900-c584-11eb-98dc-efb97ff19b93.png)
 
 Create few reviews by calling `POST /reviews` in explorer
 
 You will see the listing api as follows when you expand `GET /reviews`
 
-![Explorer Reviews_Expanded](https://raw.githubusercontent.com/Arul-/RestlerApplication/gh-pages/review-listing.png)
+![Explorer Reviews_Expanded](https://user-images.githubusercontent.com/2255137/120818266-04fddb80-c585-11eb-9d4b-ebbf88921621.png)
 
 #### Production Mode
 
