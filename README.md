@@ -1,6 +1,6 @@
-![Restler 4](https://raw.githubusercontent.com/Arul-/RestlerApplication/gh-pages/Restler.png)
+![Restler 4](https://raw.githubusercontent.com/Luracast/Restler/master/public/examples/resources/restler.svg)
 
-Restler 4 Application with Eloquent
+Restler 5 Application with Eloquent
 =================================
 
 
@@ -44,7 +44,7 @@ open terminal inside this newly created folder
  
  Eloquent Application Template offers lluminate Database support along with Migration, Seeding and Artisan.
  
- > **Note:-** This template is built using [Laravel Database](https://github.com/Luracast/Laravel-Database)
+ > **Note:-** This template is using [Laravel Database](https://github.com/Luracast/Laravel-Database)
  
  [Laravel](https://github.com/laravel/laravel) is a web application framework with expressive, elegant syntax.
  We extracted the database functionality from it and made it available for restler
@@ -90,7 +90,7 @@ one of the DB related class, database engine is initialized.
 
 #### More Documentation
 
-Refer to all database related sections on [Laravel 7 website](https://laravel.com/docs/7.x). 
+Refer to all database related sections on [Laravel 8 website](https://laravel.com/docs/8.x). 
 
 #### What to do next?
 
@@ -111,9 +111,9 @@ Next you will create a migration file for creating the new table, how about crea
 
     php artisan make:migration --create=reviews create_reviews_table
 
-    Created Migration: Created Migration: 2020_08_11_153927_create_reviews_table
+    Created Migration: Created Migration: 2021_06_04_132643_create_reviews_table
 
-Edit the `database/migrations/Created Migration: 2020_08_11_153927_create_reviews_table` file to have the following content
+Edit the `database/migrations/Created Migration: 2021_06_04_132643_create_reviews_table` file to have the following content
 
 >**Note:-** date and time of calling the command will change the file name accordingly
 
@@ -155,17 +155,18 @@ class CreateReviewsTable extends Migration
 
 ```
 
-Here we are creating reviews table with the name, email, and message columns. Next we will run the migration tool so that this table will actually be created.
+Here we are creating reviews table with the name, email, and message columns. Next we will run the migration tool 
+so that this table will actually be created.
 
 ```
 php artisan migrate
 
 Migrating: 2014_10_12_000000_create_users_table
-Migrated:  2014_10_12_000000_create_users_table (0.01 seconds)
+Migrated:  2014_10_12_000000_create_users_table (7.76ms)
 Migrating: 2014_10_12_100000_create_password_resets_table
-Migrated:  2014_10_12_100000_create_password_resets_table (0 seconds)
-Migrating: 2020_08_11_153927_create_reviews_table
-Migrated:  2020_08_11_153927_create_reviews_table (0 seconds)
+Migrated:  2014_10_12_100000_create_password_resets_table (3.13ms)
+Migrating: 2021_06_04_132643_create_reviews_table
+Migrated:  2021_06_04_132643_create_reviews_table (1.73ms)
 ```
 
 Next let us create a model class and controller class in one go
@@ -180,7 +181,7 @@ Model created successfully.
 Controller created successfully.
 ```
 
-We basically created a Reviews controller class in `app/Http/Controllers/Reviews.php` along with a model class in
+We basically created a `Reviews` controller class in `app/Http/Controllers/Reviews.php` along with a model class in
 `app/Review.php`
 
 Take a look at those files to understand what they do
@@ -212,33 +213,29 @@ use Illuminate\Database\Eloquent\Model;
 As you can see the model class has `@property` comments that links it to
 the database table structure we created earlier with a migration
 
-Lets add this new controller class and remove Home in
-`/routes/api.php`
+Let's add this new controller class and remove Home in
+`/public/index.php`
 
 ```php
 <?php
 
 use App\Http\Controllers\Home;
 use App\Http\Controllers\Reviews;
-use Luracast\Restler\Defaults;
-use Luracast\Restler\OpenApi3\Explorer;
-use Luracast\Restler\Router;
+use Luracast\Restler\Explorer\v2\Explorer;
+use Luracast\Restler\Restler;
 
-try {
-    Defaults::$productionMode = getenv('APP_ENV') == 'production';
-    Router::mapApiClasses([
-        '' => Explorer::class,
-        //Home::class,
-        Reviews::class,
-    ]);
-    $routes = Router::toArray();
-} catch (Throwable $throwable) {
-    die($throwable->getMessage() . PHP_EOL);
-}
+require __DIR__ . '/../bootstrap/autoload.php';
+
+$productionMode = getenv('APP_ENV') == 'production';
+$r = new Restler($productionMode);
+$r->addAPIClass(Explorer::class);
+//$r->addAPIClass(Home::class);
+$r->addAPIClass(Reviews::class);
+$r->handle();
 
 ```
 
-And then run the server again with `php artisan serve`
+Then run the server again with `php artisan serve`
 
 You will see the following
 
@@ -250,38 +247,16 @@ You will see the listing api as follows when you expand `GET /reviews`
 
 ![Explorer Reviews_Expanded](https://raw.githubusercontent.com/Arul-/RestlerApplication/gh-pages/review-listing.png)
 
-*It will be great if we can paginate our listing, right?*
-
-Lets re-generate the controller class with pagination
-
-```
-php artisan make:controller Reviews -m Review -p
-
-Controller already exists!
-
-php artisan make:controller Reviews -m Review -p --force
-
-Controller created successfully.
-
-```
-
-Note the addition of `-p` to paginate and `--force` to \
-force overwriting the controller class.
-
-Now we have pagination support as shown below
-
-![Explorer Reviews_Expanded Paginatopm](https://raw.githubusercontent.com/Arul-/RestlerApplication/gh-pages/review-listing-pagination.png)
-
-
 #### Production Mode
 
-Make sure all the folders inside `storage/framework/cache` have write permission for the application to write the needed files for caching
+Make sure all the folders inside `storage/framework/cache` have permission to write so that the application 
+can write the needed files for caching
 
 Create `.env` by cloning `.env.example`
 
     cp .env.example .env
 
-and update the environment as follows
+then update the environment as follows
 
     APP_ENV=production
 
@@ -289,4 +264,5 @@ You may also update the database configuration inside the `.env` file
 
 Now Restler should be running in production mode and laravel related components are running under production environment!
 
-> **Note:-** when running in production mode restler won't detect addition or removal of an api. You need to manually delete the cache files under `storage/framework/cache`
+> **Note:-** When running in production mode restler won't detect addition or removal of an api. 
+> You need to manually delete the cache files under `storage/framework/cache`

@@ -20,6 +20,7 @@
 
 use App\Http\Controllers\Home;
 use App\Http\Controllers\Reviews;
+use Luracast\Restler\Explorer\v1\Explorer;
 use Luracast\Restler\Restler;
 
 require __DIR__ . '/../bootstrap/autoload.php';
@@ -52,6 +53,5 @@ require __DIR__ . '/../bootstrap/autoload.php';
 $productionMode = getenv('APP_ENV') == 'production';
 $r = new Restler($productionMode);
 $r->addAPIClass(Explorer::class);
-$r->addAPIClass(Home::class,'');
-$r->addAPIClass(Reviews::class);
+$r->addAPIClass(Home::class);
 $r->handle();
